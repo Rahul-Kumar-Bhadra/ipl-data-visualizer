@@ -397,11 +397,10 @@ document.addEventListener("DOMContentLoaded", () => {
         chatMessages.scrollTop = chatMessages.scrollHeight;
 
         try {
-            const res = await fetch('https://api.groq.com/openai/v1/chat/completions', {
+            const res = await fetch('/api/chat', {
                 method: 'POST',
                 headers: {
-                    'Content-Type': 'application/json',
-                    'Authorization': 'Bearer YOUR_GROQ_API_KEY_HERE' // IMPORTANT: Do not hardcode secrets! Use environment variables or a proxy.
+                    'Content-Type': 'application/json'
                 },
                 body: JSON.stringify({
                     model: "llama-3.1-8b-instant",
