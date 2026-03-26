@@ -1,0 +1,303 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Premium IPL Dashboard</title>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="app-layout">
+        <!-- Sidebar -->
+        <aside class="sidebar">
+            <div class="logo-container">
+                <div class="logo-icon"></div>
+                <h2>IPL <span class="highlight">Portal</span></h2>
+            </div>
+            <nav class="nav-menu">
+                <button class="nav-btn active" data-target="view-home"><span>🏠</span> Home</button>
+                <button class="nav-btn" data-target="view-stats"><span>📊</span> Stats</button>
+                <button class="nav-btn" data-target="view-compare"><span>⚔️</span> Compare</button>
+                <button class="nav-btn" data-target="view-polls"><span>🗳️</span> Polls</button>
+                <button class="nav-btn" data-target="view-schedule"><span>📅</span> Schedule</button>
+                <button class="nav-btn" data-target="view-debate"><span>💬</span> Debate</button>
+                <button class="nav-btn" data-target="view-chat"><span>🤖</span> AI Chat</button>
+                <div style="flex-grow: 1;"></div>
+                <button class="nav-btn ghost" id="logout-btn" style="color: #ff5f6d; border-top: 1px solid rgba(255,255,255,0.05); margin-top:20px; border:none; text-align:left; justify-content:flex-start;"><span>🚪</span> Log Out</button>
+            </nav>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            
+            <!-- ====== HOME VIEW ====== -->
+            <section id="view-home" class="view active fade-in">
+                <header class="view-header">
+                    <h1>Welcome to <span class="highlight">IPL Insights</span></h1>
+                    <p class="subtitle">The ultimate hub for stats, predictions, and analysis.</p>
+                </header>
+
+                <div class="hero-banner">
+                    <div class="hero-content">
+                        <h2>IPL 2024: The Race to the Playoffs!</h2>
+                        <p>Track your favorite teams and analyze historical data to predict the next champion.</p>
+                    </div>
+                </div>
+
+                <div class="dashboard-grid home-grid">
+                    <div class="news-section span-2">
+                        <h3><span class="highlight">📰</span> Latest News</h3>
+                        <div class="news-cards">
+                            <div class="glass-card news-card">
+                                <h4>Record Breaking Chase!</h4>
+                                <p>A phenomenal batting display helps chase down 200+ runs with ease, setting a new tournament record.</p>
+                                <span class="tag">Highlights</span>
+                            </div>
+                            <div class="glass-card news-card">
+                                <h4>Injuries Mount Up</h4>
+                                <p>Key players sidelined ahead of crucial playoff-deciding matches. How will the teams adjust?</p>
+                                <span class="tag">Updates</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="upcoming-section span-2">
+                        <h3><span class="highlight">🔜</span> Highlighted Fixtures</h3>
+                        <div class="fixture-list">
+                            <div class="glass-card fixture-card">
+                                <div class="teams">MI vs CSK</div>
+                                <div class="date">Wankhede Stadium</div>
+                                <div class="badge">El Clasico</div>
+                            </div>
+                            <div class="glass-card fixture-card">
+                                <div class="teams">RCB vs KKR</div>
+                                <div class="date">M. Chinnaswamy</div>
+                                <div class="badge">Rivalry Week</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- ====== STATS VIEW ====== -->
+            <section id="view-stats" class="view">
+                <header class="view-header">
+                    <h1>Tournament <span class="highlight">Statistics</span></h1>
+                </header>
+
+                <!-- Users original glowing cards -->
+                <div class="summary-section">
+                    <div class="card">
+                        <p class="heading" id="val-matches">--</p>
+                        <p>Total Matches</p>
+                        <p>Played</p>
+                    </div>
+                    <div class="card">
+                        <p class="heading" id="val-runs">--</p>
+                        <p>Total Runs</p>
+                        <p>Scored</p>
+                    </div>
+                    <div class="card">
+                        <p class="heading" id="val-wickets">--</p>
+                        <p>Total Wickets</p>
+                        <p>Taken</p>
+                    </div>
+                </div>
+
+                <div class="cap-holders">
+                    <div class="glass-card cap-card orange">
+                        <div class="cap-icon">🧢</div>
+                        <div class="cap-info">
+                            <h4>Orange Cap</h4>
+                            <h2 id="orange-cap-name">Loading...</h2>
+                            <p id="orange-cap-stat">-- Runs</p>
+                        </div>
+                    </div>
+                    <div class="glass-card cap-card purple">
+                        <div class="cap-icon">🧢</div>
+                        <div class="cap-info">
+                            <h4>Purple Cap</h4>
+                            <h2 id="purple-cap-name">Loading...</h2>
+                            <p id="purple-cap-stat">-- Wickets</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="dashboard-grid mt-4">
+                    <div class="chart-container span-2">
+                        <h2>Top Run Scorers</h2>
+                        <div class="canvas-wrapper"><canvas id="runsChart"></canvas></div>
+                    </div>
+                    <div class="chart-container span-2">
+                        <h2>Top Wicket Takers</h2>
+                        <div class="canvas-wrapper"><canvas id="wicketsChart"></canvas></div>
+                    </div>
+                    <div class="chart-container span-2">
+                        <h2>Matches Won By Team</h2>
+                        <div class="canvas-wrapper"><canvas id="teamWinsChart"></canvas></div>
+                    </div>
+                    <div class="chart-container span-2">
+                        <h2>Toss Decisions</h2>
+                        <div class="canvas-wrapper pie-wrapper"><canvas id="tossChart"></canvas></div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- ====== COMPARE VIEW ====== -->
+            <section id="view-compare" class="view">
+                <header class="view-header">
+                    <h1>Player <span class="highlight">Comparison</span></h1>
+                    <p class="subtitle">Head-to-head statistical breakdown.</p>
+                </header>
+
+                <div class="compare-controls glass-card">
+                    <div class="select-wrapper">
+                        <label>Player A</label>
+                        <select id="player-a-select">
+                            <option value="">Select a Player</option>
+                        </select>
+                    </div>
+                    <div class="vs-badge">VS</div>
+                    <div class="select-wrapper">
+                        <label>Player B</label>
+                        <select id="player-b-select">
+                            <option value="">Select a Player</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="compare-results" id="compare-results" style="display: none;">
+                    <div class="dashboard-grid">
+                        <div class="chart-container span-4">
+                            <h2>Head to Head: <span class="highlight text-a" id="vs-name-a"></span> vs <span class="highlight text-b" id="vs-name-b"></span></h2>
+                            <div class="canvas-wrapper compare-canvas-wrapper">
+                                <canvas id="compareChart"></canvas>
+                            </div>
+                        </div>
+                        
+                        <div class="glass-card stat-compare text-center span-2">
+                            <h3 id="stat-a-name" class="text-a">Player A</h3>
+                            <div class="stat-row"><span>Matches:</span> <strong id="stat-a-matches"></strong></div>
+                            <div class="stat-row"><span>Average:</span> <strong id="stat-a-avg"></strong></div>
+                            <div class="stat-row"><span>Strike Rate:</span> <strong id="stat-a-sr"></strong></div>
+                            <div class="stat-row"><span>100s / 50s:</span> <strong id="stat-a-100s"></strong></div>
+                            <div class="stat-row"><span>Economy:</span> <strong id="stat-a-eco"></strong></div>
+                        </div>
+
+                        <div class="glass-card stat-compare text-center span-2">
+                            <h3 id="stat-b-name" class="text-b">Player B</h3>
+                            <div class="stat-row"><span>Matches:</span> <strong id="stat-b-matches"></strong></div>
+                            <div class="stat-row"><span>Average:</span> <strong id="stat-b-avg"></strong></div>
+                            <div class="stat-row"><span>Strike Rate:</span> <strong id="stat-b-sr"></strong></div>
+                            <div class="stat-row"><span>100s / 50s:</span> <strong id="stat-b-100s"></strong></div>
+                            <div class="stat-row"><span>Economy:</span> <strong id="stat-b-eco"></strong></div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- ====== POLLS VIEW ====== -->
+            <section id="view-polls" class="view">
+                <header class="view-header">
+                    <h1>Fan <span class="highlight">Polls</span></h1>
+                </header>
+                
+                <div class="polls-container">
+                    <div class="glass-card poll-card" id="poll-1">
+                        <h3>Who is the best IPL Captain ever?</h3>
+                        <div class="poll-options">
+                            <button class="poll-btn" data-poll="1" data-option="MS Dhoni">MS Dhoni <span class="percent"></span></button>
+                            <button class="poll-btn" data-poll="1" data-option="Rohit Sharma">Rohit Sharma <span class="percent"></span></button>
+                            <button class="poll-btn" data-poll="1" data-option="Virat Kohli">Virat Kohli <span class="percent"></span></button>
+                            <button class="poll-btn" data-poll="1" data-option="Gautam Gambhir">Gautam Gambhir <span class="percent"></span></button>
+                        </div>
+                    </div>
+
+                    <div class="glass-card poll-card" id="poll-2">
+                        <h3>Which team will win the next season?</h3>
+                        <div class="poll-options">
+                            <button class="poll-btn" data-poll="2" data-option="CSK">Chennai Super Kings <span class="percent"></span></button>
+                            <button class="poll-btn" data-poll="2" data-option="MI">Mumbai Indians <span class="percent"></span></button>
+                            <button class="poll-btn" data-poll="2" data-option="RCB">Royal Challengers Bangalore <span class="percent"></span></button>
+                            <button class="poll-btn" data-poll="2" data-option="Others">Others <span class="percent"></span></button>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- ====== SCHEDULE VIEW ====== -->
+            <section id="view-schedule" class="view">
+                <header class="view-header">
+                    <h1>Match <span class="highlight">Schedule</span></h1>
+                </header>
+                <div class="schedule-container" id="schedule-container">
+                    <!-- Injected by JS -->
+                </div>
+            </section>
+
+            <!-- ====== DEBATE VIEW ====== -->
+            <section id="view-debate" class="view">
+                <header class="view-header">
+                    <h1>IPL <span class="highlight">Debate</span></h1>
+                    <p class="subtitle">Join the discussion with other fans.</p>
+                </header>
+
+                <div class="glass-card debate-compose">
+                    <input type="text" id="debate-name" placeholder="Your Name" autocomplete="off">
+                    <textarea id="debate-msg" placeholder="Share your hot take on current matches..."></textarea>
+                    <button id="post-btn" class="glow-btn">Post Comment</button>
+                </div>
+
+                <div class="debate-feed" id="debate-feed">
+                    <!-- LocalStorage comments -->
+                </div>
+            </section>
+
+            <!-- ====== CHAT VIEW ====== -->
+            <section id="view-chat" class="view">
+                <header class="view-header">
+                    <h1>Cricket <span class="highlight">AI Assistant</span></h1>
+                    <p class="subtitle">Ask any question about cricket or IPL history.</p>
+                </header>
+
+                <div class="chat-container glass-card">
+                    <div class="chat-messages" id="chat-messages">
+                        <div class="message ai-message">
+                            <div class="msg-bubble">Hello! I am your IPL & Cricket AI expert. How can I help you today?</div>
+                        </div>
+                    </div>
+                    <div class="chat-input-area">
+                        <input type="text" id="chat-input" placeholder="Ask about Virat Kohli's stats, IPL history, rules..." autocomplete="off" />
+                        <button id="chat-send-btn" class="glow-btn">Send</button>
+                    </div>
+                </div>
+            </section>
+
+        </main>
+    </div>
+    <script src="script.js"></script>
+    <script>
+        document.addEventListener("DOMContentLoaded", () => {
+            // Check session using our localStorage-based auth
+            const token = localStorage.getItem('ipl_access_token');
+            if (!token) {
+                window.location.href = 'login.html';
+                return;
+            }
+
+            // Logout Event Listener
+            const logoutBtn = document.getElementById('logout-btn');
+            if (logoutBtn) {
+                logoutBtn.addEventListener('click', () => {
+                    localStorage.removeItem('ipl_access_token');
+                    localStorage.removeItem('ipl_refresh_token');
+                    localStorage.removeItem('ipl_user');
+                    window.location.href = 'index.html';
+                });
+            }
+        });
+    </script>
+</body>
+</html>

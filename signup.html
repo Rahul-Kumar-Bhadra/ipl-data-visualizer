@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>IPL Insights | Sign Up</title>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="auth.css">
+</head>
+<body>
+    
+    <div class="auth-bg">
+        <img src="https://images.unsplash.com/photo-1540747913346-19e32dc3e97e?q=80&w=2000&auto=format&fit=crop" alt="Stadium">
+    </div>
+
+    <div class="auth-container">
+        
+        <a href="index.html" class="back-link">&larr; Back to Home</a>
+
+        <div class="auth-card">
+            <div class="logo-container">
+                <div class="logo-icon"></div>
+                <h2>Create <span class="highlight">Account</span></h2>
+            </div>
+            
+            <p class="subtitle">Join thousands of fans analyzing real-time match data today.</p>
+
+            <form id="signup-form">
+                <div class="input-group">
+                    <label>Full Name</label>
+                    <input type="text" id="name-input" placeholder="John Doe" required>
+                </div>
+                <div class="input-group">
+                    <label>Email Address</label>
+                    <input type="email" id="email-input" placeholder="you@example.com" required>
+                </div>
+                <div class="input-group">
+                    <label>Password</label>
+                    <input type="password" id="password-input" placeholder="••••••••" required>
+                </div>
+
+                <button type="submit" id="signup-btn" class="auth-btn">Start Free</button>
+            </form>
+
+            <p class="switch-auth">Already have an account? <a href="login.html">Log In</a></p>
+        </div>
+    </div>
+
+    <script>
+        const SUPABASE_URL = 'https://ioymvfarpsjuugorxznw.supabase.co';
+        const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImlveW12ZmFycHNqdXVnb3J4em53Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzQ1MDEwNTAsImV4cCI6MjA5MDA3NzA1MH0.CgMyc3y8YikKveP9WyiotELrfGqEjzr6rMG3eBMRA_w';
+
+        const form = document.getElementById('signup-form');
+        const btn = document.getElementById('signup-btn');
+
+        function setBtn(text, color = 'white') {
+            btn.innerText = text;
+            btn.style.color = color;
+        }
+
+        form.addEventListener('submit', async function(e) {
+            e.preventDefault();
+
+            const email    = document.getElementById('email-input').value.trim();
+            const password = document.getElementById('password-input').value;
+            const name     = document.getElementById('name-input').value.trim();
+
+            setBtn('Creating Account...');
+            btn.disabled = true;
+
+            try {
+                const res = await fetch(`${SUPABASE_URL}/auth/v1/signup`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'apikey': SUPABASE_ANON_KEY,
+                        'Authorization': `Bearer ${SUPABASE_ANON_KEY}`
+                    },
+                    body: JSON.stringify({
+                        email: email,
+                        password: password,
+                        data: { full_name: name }
+                    })
+                });
+
+                const data = await res.json();
+
+                if (!res.ok) {
+                    // Server returned error (e.g. already registered, weak password)
+                    const msg = data.msg || data.error_description || 'Signup failed. Try again.';
+                    setBtn(msg, '#ff5f6d');
+                    setTimeout(() => { setBtn('Start Free'); btn.disabled = false; }, 4000);
+                    return;
+                }
+
+                // Save session token to localStorage so dashboard can use it
+                if (data.access_token) {
+                    localStorage.setItem('ipl_access_token', data.access_token);
+                    localStorage.setItem('ipl_refresh_token', data.refresh_token || '');
+                    localStorage.setItem('ipl_user', JSON.stringify(data.user));
+                    setBtn('Success! Redirecting...');
+                    setTimeout(() => { window.location.href = 'dashboard.html'; }, 500);
+                } else {
+                    // Email confirmation is still on — shouldn't happen but fallback
+                    setBtn('Check your email to verify!');
+                    setTimeout(() => { window.location.href = 'login.html'; }, 3000);
+                }
+
+            } catch (err) {
+                // Network error
+                setBtn('Network error — check connection', '#ff5f6d');
+                setTimeout(() => { setBtn('Start Free'); btn.disabled = false; }, 4000);
+            }
+        });
+    </script>
+</body>
+</html>

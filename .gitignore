@@ -1,0 +1,19 @@
+# OS files
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
+npm-debug.log*
+
+# Python
+__pycache__/
+*.pyc
+
+# Data (Optional: if the CSVs are too big or you want to keep them local)
+# deliveries.csv
+# matches.csv
+
+# Local environment
+.env
+.vercel/
